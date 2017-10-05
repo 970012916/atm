@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dayuanit.atm.mapper.CardMapper">
+
+	<resultMap id="cardResultMap" type="card">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id"/>
+		<result property="cardNum" column="card_num"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+		<result property="status" column="status"/>
+		<result property="balance" column="balance"/>
+	</resultMap>
+	
+	<sql id="atm_card_filed">
+		id, user_id, card_num, create_time,modify_time,status,balance
+	</sql>
+	
+	<insert id="add" parameterType="card" useGeneratedKeys="true" keyProperty="id">
+		insert into atm_card(user_id, card_num, create_time,modify_time,status,balance) 
+		value(#{userId}, #{cardNum},now(),now(),#{status},#{balance})
+	</insert>
+	
+	<select id="listBankCardByUserId" resultMap="cardResultMap">
+		select <include refid="atm_card_filed"></include> 
+		from atm_card
+		where user_id=#{userId} and status=1
+		order by id desc limit #{offset}, #{pageNum};
+	</select>
+	
+	<select id="countBankCardByUserId" resultType="int">
+		select count(id) from atm_card
+		where user_id=#{userId} and status=1;
+	</select>
+	
+</mapper>
+
