@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--CardView适用于实现卡片式布局效果的重要控件，
+    由appcompat-v7库提供，实际上CardView也是一个FrameLayout，
+    只是额外提供了圆角和阴影效果，看上去有立体的感觉。
+    一般CardView都用在ListView的item布局中。
+ -->
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/img_content"
+        android:scaleType="centerCrop"/>
+</android.support.v7.widget.CardView>

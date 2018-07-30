@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:fitsSystemWindows="true"
+    android:background="@color/white">
+
+
+
+    <!--从字面上看，指的是让该控件的左侧与父布局对齐，当我们希望控件A与控件B左侧对齐时，就可以使用该属性。
+    例子：app:layout_constraintLeft_toLeftOf="@id/viewB"-->
+
+   <!-- app:layout_constraintLeft_toRightOf
+    很好理解，即当前属性的左侧在谁的右侧，当我们希望控件A在控件B的右侧时，可以设置：
+    app:layout_constraintLeft_toRightOf="@id/viewB"-->
+
+    <ImageView
+        android:id="@+id/img_head_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/bg_nav_top_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/ic_nav_icon" />
+
+    <View
+        android:id="@+id/bg_nav_top_bg"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_nav_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/bg_nav_top_bg"
+        app:layout_constraintLeft_toLeftOf="@id/bg_nav_top_bg"
+        app:layout_constraintTop_toTopOf="@id/bg_nav_top_bg" />
+
+</android.support.constraint.ConstraintLayout>
+
+
