@@ -28,13 +28,14 @@
 
     <View
         android:id="@+id/bg_nav_top_bg"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!--layout_marginStart 指外边距,当前控件距离父控件起始位置-->
     <TextView
         android:id="@+id/tv_nav_title"
         android:layout_width="wrap_content"

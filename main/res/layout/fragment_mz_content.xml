@@ -1,46 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <!--
         beforeDescendants：viewgroup会优先其子类控件而获取到焦点
         afterDescendants：viewgroup只有当其子类控件不需要获取焦点时才获取焦点
         blocksDescendants：viewgroup会覆盖子类控件而直接获得焦点-->
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srl_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:descendantFocusability="blocksDescendants">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rec_mz"
-            android:background="@color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"
+            android:background="@color/white" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-        <!--layout_gravity 在父容器中的位置-->
-        <!--visible显示；invisible显示黑背景条；gone不显示-->
-        <!--首先查看的你的Activity 继承的是那个Activity 如果是继承AppcompatActivity  使用 ImageView的 app:srcCompat 是没有问题的
-            如果你的Activity不是继承的AppcompatActivity， 需要用到 android.support.v7.widget.AppCompatImageView 代替 ImageView。
-        -->
-        <android.support.design.widget.FloatingActionButton
-            android:layout_gravity="bottom|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/fab_top"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            app:borderWidth="0dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_fab_love"
-            />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        app:borderWidth="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_fab_love" />
 
 
 </android.support.constraint.ConstraintLayout>

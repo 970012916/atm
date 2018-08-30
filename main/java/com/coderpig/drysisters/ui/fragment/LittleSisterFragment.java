@@ -3,6 +3,7 @@ package com.coderpig.drysisters.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,52 +15,70 @@ import android.view.ViewGroup;
 
 import com.coderpig.drysisters.R;
 
-import io.reactivex.annotations.Nullable;
 import io.reactivex.disposables.CompositeDisposable;
+
+
+/**
+ * 描述：妹看小姐姐的Fragment
+ *
+ * @author jay on 2018/1/12 12:19
+ */
 
 public class LittleSisterFragment extends Fragment{
 
-    private Context context;
+   // private Context mContext;
     private TabLayout tl_little_sister;
-    private ViewPager vp_content;
+    private ViewPager viewPager;
     protected CompositeDisposable mSubscriptions;
 
-    public  static LittleSisterFragment newInstance(){
+    public static LittleSisterFragment newInstance() {
         LittleSisterFragment fragment = new LittleSisterFragment();
-        return  fragment;
+        return fragment;
     }
 
-    @Nullable
-    @Override
+    @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_little_sister,container,false);
+       //container:cly_main_content
+        View view = inflater.inflate(R.layout.fragment_little_sister, container, false);
         tl_little_sister = view.findViewById(R.id.tl_little_sister);
-        vp_content = view.findViewById(R.id.vp_content);
+        viewPager = view.findViewById(R.id.vp_content);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context = getActivity();
-        mSubscriptions = new CompositeDisposable();
+       // mContext = getActivity();
 
+        /**
+         * 解除订阅关系
+         */
+        mSubscriptions = new CompositeDisposable();
+        TabFragmentPagerAdapter adapter = new TabFragmentPagerAdapter(this.getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+        tl_little_sister.setupWithViewPager(viewPager);
     }
 
+    @Override public void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.clear();
+    }
     /**
      * FragmentPagerAdapter 消除数据
      */
     private class TabFragmentPagerAdapter extends FragmentPagerAdapter {
-
+        /**
+        * 图片内容上部的tab
+         */
         private final String[] mTitles = {"Gank.io"};
 
-        public TabFragmentPagerAdapter(FragmentManager fm) {
+        private TabFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return null;
+            return GankMZFragment.newInstance();
         }
 
         @Override
@@ -67,10 +86,12 @@ public class LittleSisterFragment extends Fragment{
             return mTitles.length;
         }
 
-        @android.support.annotation.Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return super.getPageTitle(position);
+            return mTitles[position];
         }
     }
+
+
+
 }

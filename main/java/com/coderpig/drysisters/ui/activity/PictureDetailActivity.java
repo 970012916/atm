@@ -10,15 +10,18 @@ import com.coderpig.drysisters.R;
 import com.r0adkll.slidr.Slidr;
 
 /**
- * 图片详情页面
+ * 描述：图片详情页
+ *
+ * @author CoderPig on 2018/02/28 10:39.
  */
-public class PictureDetailActivity extends AppCompatActivity {
+
+public class PictureDetailActivity extends AppCompatActivity{
 
     private ImageView img_picture;
     private String picUrl;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture_detail);
         /**
@@ -30,13 +33,13 @@ public class PictureDetailActivity extends AppCompatActivity {
         initView();
     }
 
-    private void initData(){
+    private void initData() {
         picUrl = getIntent().getStringExtra("pic_url");
     }
 
-    private void initView(){
+    private void initView() {
         img_picture = findViewById(R.id.img_picture);
-        if(null != picUrl) {
+        if(picUrl != null) {
             Glide.with(this).load(picUrl).into(img_picture);
         }
     }

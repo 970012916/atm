@@ -1,5 +1,11 @@
 package com.coderpig.drysisters.data.dto;
 
+/**
+ * 描述：Gank.io 返回的妹子
+ *
+ * @author CoderPig on 2018/02/14 10:53.
+ */
+
 public class GankMeizi {
     private String _id;
     private String createdAt;

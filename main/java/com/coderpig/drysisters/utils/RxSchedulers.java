@@ -1,9 +1,6 @@
 package com.coderpig.drysisters.utils;
 
-import android.net.wifi.aware.PublishConfig;
-
 import com.coderpig.drysisters.R;
-import com.coderpig.drysisters.ResUtils;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.ConnectException;
@@ -12,17 +9,18 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import io.reactivex.ObservableTransformer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
- * RX处理工具
+ * 描述：Rx 处理工具类
+ *
+ * @author CoderPig on 2018/02/14 11:06.
  */
-public class RxSchedulers {
 
-    public static <T>ObservableTransformer<T,T> compose() {
+public class RxSchedulers {
+    public static <T> ObservableTransformer<T, T> compose() {
         return upstream ->
                 upstream.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
@@ -41,5 +39,4 @@ public class RxSchedulers {
             Timber.d(e.getMessage());
         }
     }
-
 }

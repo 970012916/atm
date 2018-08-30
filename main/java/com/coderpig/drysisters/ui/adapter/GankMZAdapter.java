@@ -14,32 +14,38 @@ import com.coderpig.drysisters.R;
 import com.coderpig.drysisters.data.dto.GankMeizi;
 import com.coderpig.drysisters.ui.activity.PictureDetailActivity;
 
-import java.net.Inet4Address;
 import java.util.ArrayList;
+import java.util.List;
 
-public class GankMZAdapter extends RecyclerView.Adapter<GankMZAdapter.ViewHolder>{
+/**
+ * 描述：
+ *
+ * @author CoderPig on 2018/02/14 12:15.
+ */
 
-    private Context context;
-    private ArrayList<GankMeizi> mzs = new ArrayList<GankMeizi>();
+public class GankMZAdapter extends RecyclerView.Adapter<GankMZAdapter.ViewHolder> {
 
-    public GankMZAdapter(Context context,ArrayList<GankMeizi> mzs) {
-        this.context = context;
+    private Context mContext;
+    private ArrayList<GankMeizi> mzs = new ArrayList<>();
+
+    public GankMZAdapter(Context mContext, ArrayList<GankMeizi> mzs) {
+        this.mContext = mContext;
         this.mzs = mzs;
     }
 
-    public void addAll(ArrayList<GankMeizi> data){
+    public void addAll(List<GankMeizi> data) {
         mzs.clear();
         mzs.addAll(data);
         notifyDataSetChanged();
     }
 
-    public void loadMore(ArrayList<GankMeizi> data) {
+    public void loadMore(List<GankMeizi> data) {
         mzs.addAll(data);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mz,parent,false));
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mz, parent, false));
     }
 
     @Override
@@ -54,9 +60,9 @@ public class GankMZAdapter extends RecyclerView.Adapter<GankMZAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView img_content;
+        ImageView img_content;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             img_content = itemView.findViewById(R.id.img_content);
         }
@@ -73,14 +79,15 @@ public class GankMZAdapter extends RecyclerView.Adapter<GankMZAdapter.ViewHolder
              *
              * 3、into(ImageView imageView) - 你需要显示图片的目标 ImageView
              */
-            Glide.with(context)
+            Glide.with(mContext)
                     .load(data.getUrl())
-                    .apply(new RequestOptions().centerCrop())
+                    .apply(new RequestOptions()
+                            .centerCrop())
                     .into(img_content);
             img_content.setOnClickListener(view -> {
-                Intent intent = new Intent(context, PictureDetailActivity.class);
-                intent.putExtra("pic_url",data.getUrl());
-                context.startActivity(intent);
+                Intent intent = new Intent(mContext, PictureDetailActivity.class);
+                intent.putExtra("pic_url", data.getUrl());
+                mContext.startActivity(intent);
             });
         }
     }

@@ -18,10 +18,10 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
 import com.coderpig.drysisters.R;
-import com.coderpig.drysisters.ResUtils;
 import com.coderpig.drysisters.data.dto.GankMeizi;
 import com.coderpig.drysisters.net.APIService;
 import com.coderpig.drysisters.ui.adapter.GankMZAdapter;
+import com.coderpig.drysisters.utils.ResUtils;
 import com.coderpig.drysisters.utils.RxSchedulers;
 import com.coderpig.drysisters.utils.ToastUtils;
 import com.google.gson.JsonSyntaxException;
@@ -31,8 +31,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
@@ -41,8 +41,11 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
- * 描述：Gank.io妹子Fragment;
+ * 描述：Gank.io妹子Fragment
+ *
+ * @author CoderPig on 2018/02/14 09:49.
  */
+
 public class GankMZFragment extends Fragment {
 
     private static final String TAG = "GankMZFragment";
@@ -54,17 +57,16 @@ public class GankMZFragment extends Fragment {
     private RecyclerView rec_mz;
     private CompositeDisposable mSubscriptions;
     private GankMZAdapter mAdapter;
-    private static final int PRELAOD_SIZE = 6;
-    private  int mCurPage = 1;
+    private static final int PRELOAD_SIZE = 6;
+    private int mCurPage = 1;
     private ArrayList<GankMeizi> mData;
     /**
      * 设置动画速度
      */
     private final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
 
-
-    public static GankMZFragment newInstance(){
-        return  new GankMZFragment();
+    public static GankMZFragment newInstance() {
+        return new GankMZFragment();
     }
 
 
@@ -73,46 +75,49 @@ public class GankMZFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         /**
          * 其中false意思为：把布局添加到父视图中，并保留父视图中的其他视图；
+         * container:ViewPager
          */
-        View view = inflater.inflate(R.layout.fragment_mz_content,container,false);
+        View view = inflater.inflate(R.layout.fragment_mz_content, container, false);
         srl_refresh = view.findViewById(R.id.srl_refresh);
         rec_mz = view.findViewById(R.id.rec_mz);
         fab_top = view.findViewById(R.id.fab_top);
+        /**
+         * 使用lambda表达式表示一个接口
+         */
         srl_refresh.setOnRefreshListener(() -> {
             mCurPage = 1;
             fetchGankMZ(true);
         });
-
-        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
+        final GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
         rec_mz.setLayoutManager(layoutManager);
         rec_mz.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                if(newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    if(layoutManager.getItemCount() - recyclerView.getChildCount() <= layoutManager.findFirstVisibleItemPosition()) {
-                        mCurPage ++;
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {//加载更多
+                    //返回的绑定数据数量（40） - 当前页面显示出的图片数量（8） <= 可见图片的第一张的位置（32）
+                    if (layoutManager.getItemCount() - recyclerView.getChildCount() <= layoutManager.findFirstVisibleItemPosition()) {
+                        ++mCurPage;
                         fetchGankMZ(false);
                     }
-                    if(layoutManager.findLastCompletelyVisibleItemPosition() != 0) {
-
-                        fabInAnim();
-                    }else{
-                        fabOutAnim();
-                    }
+                }
+                if (layoutManager.findFirstVisibleItemPosition() != 0) {
+                    fabInAnim();
+                } else {
+                    fabOutAnim();
                 }
             }
         });
-        fab_top.setOnClickListener( v -> {
-                LinearLayoutManager manager = (LinearLayoutManager)rec_mz.getLayoutManager();
-                //如果超过50项直接跳开头；
-                if (manager.findFirstVisibleItemPosition() < 50 ) {
-                    rec_mz.smoothScrollToPosition(0);
-                } else {
-                    rec_mz.scrollToPosition(0);
-                    fabOutAnim();
-                }
+        fab_top.setOnClickListener(v -> {
+            LinearLayoutManager manager = (LinearLayoutManager) rec_mz.getLayoutManager();
+            //如果超过50项直接跳到开头，不然要滚好久
+            if(manager.findFirstVisibleItemPosition() < 50) {
+                rec_mz.smoothScrollToPosition(0);
+            } else {
+                rec_mz.scrollToPosition(0);
+                fabOutAnim();
+            }
         });
         return view;
     }
@@ -124,7 +129,6 @@ public class GankMZFragment extends Fragment {
      * @param view
      * @param savedInstanceState
      */
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -133,11 +137,12 @@ public class GankMZFragment extends Fragment {
          */
         mSubscriptions = new CompositeDisposable();
         mData = new ArrayList<>();
-        mAdapter = new GankMZAdapter(getActivity(),mData);
+        mAdapter = new GankMZAdapter(getActivity(), mData);
         rec_mz.setAdapter(mAdapter);
         srl_refresh.setRefreshing(true);
         fetchGankMZ(true);
     }
+
 
     @Override
     public void onDestroy() {
@@ -145,11 +150,9 @@ public class GankMZFragment extends Fragment {
         mSubscriptions.clear();
     }
 
-    /**
-     * 拉取数据
-     */
-    private void fetchGankMZ(boolean isRefresh){
-        Disposable subscribe = APIService.getInstance().apis.fetchGankMZ(20,mCurPage)
+    /* 拉取妹子数据 */
+    private void fetchGankMZ(boolean isRefresh) {
+        Disposable subscribe = APIService.getInstance().apis.fetchGankMZ(20,0)
                 /**
                  * subscribeOn(): 指定 subscribe() 所发生的线程，
                  * 即 Observable.OnSubscribe 被激活时所处的线程。
@@ -171,43 +174,42 @@ public class GankMZFragment extends Fragment {
                  * 在onError和或onCompleted后调用指定的操作，或由下游处理。
                  */
                 .doFinally(() -> srl_refresh.setRefreshing(false))
-                .subscribe(
+                .subscribe(data -> {
 
-                        /**
-                         * data 的类型在 fetchGankMZ(20,mCurPage)方法的返回类型中确定 Flowable<GankResult> fetchGankMZ(）
-                         */
-                        data -> {
-                            if (null == data && data.getResults() != null && data.getResults().size() > 0) {
-                                ArrayList<GankMeizi> results = data.getResults();
-                                if (isRefresh) {
-                                    mAdapter.addAll(results);
-                                    ToastUtils.shortToast("刷新成功");
-                                } else {
-                                    mAdapter.loadMore(results);
-                                    /**
-                                     * 下滑新增
-                                     */
-                                    String msg = String.format(ResUtils.getString(R.string.load_more_num), results.size(), "妹子");
-                                    ToastUtils.shortToast(msg);
-                                }
-                            }
-                        }, new Consumer<Throwable>() {
-                            @Override
-                            public void accept(Throwable e) throws Exception {
-                                if(e instanceof ConnectException || e instanceof SocketException) {
-                                    ToastUtils.shortToast(ResUtils.getString(R.string.network_connected_exception));
-                                } else if(e instanceof SocketTimeoutException) {
-                                    ToastUtils.shortToast(ResUtils.getString(R.string.network_socket_time_out));
-                                } else if(e instanceof JsonSyntaxException) {
-                                    ToastUtils.shortToast(ResUtils.getString(R.string.network_json_syntax_exception));
-                                } else if(e instanceof UnknownHostException) {
-                                    ToastUtils.shortToast(ResUtils.getString(R.string.network_unknown_host));
-                                } else {
-                                    Timber.d(e.getMessage());
-                                }
-                            }
-                        });// RxSchedulers::processRequestException
-                        //  其中Consumer中的accept()方法接收一个来自Observable的单个值。Consumer就是一个观察者。其他函数式接口可以类似应用。
+                    /**
+                     * data 的类型在 fetchGankMZ(20,mCurPage)方法的返回类型中确定 Flowable<GankResult> fetchGankMZ(）
+                     */
+                    if(data != null && data.getResults() != null && data.getResults().size() > 0) {
+                        List<GankMeizi> results = data.getResults();
+                        if (isRefresh) {
+                            mAdapter.addAll(results);
+                            ToastUtils.shortToast(ResUtils.getString(R.string.refresh_success));
+                        } else {
+                            mAdapter.loadMore(results);
+                            /**
+                             * 下滑新增
+                             */
+                            String msg = String.format(ResUtils.getString(R.string.load_more_num),results.size(),"妹子");
+                            ToastUtils.shortToast(msg);
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable e) throws Exception {
+                        if(e instanceof ConnectException || e instanceof SocketException) {
+                            ToastUtils.shortToast(ResUtils.getString(R.string.network_connected_exception));
+                        } else if(e instanceof SocketTimeoutException) {
+                            ToastUtils.shortToast(ResUtils.getString(R.string.network_socket_time_out));
+                        } else if(e instanceof JsonSyntaxException) {
+                            ToastUtils.shortToast(ResUtils.getString(R.string.network_json_syntax_exception));
+                        } else if(e instanceof UnknownHostException) {
+                            ToastUtils.shortToast(ResUtils.getString(R.string.network_unknown_host));
+                        } else {
+                            Timber.d(e.getMessage());
+                        }
+                    }
+                });// RxSchedulers::processRequestException
+        //  其中Consumer中的accept()方法接收一个来自Observable的单个值。Consumer就是一个观察者。其他函数式接口可以类似应用。;
         mSubscriptions.add(subscribe);
     }
 
@@ -216,9 +218,9 @@ public class GankMZFragment extends Fragment {
         /**
          *  View.GONE : This view is invisible, and it doesn't take any space for layout
          */
-        if (fab_top.getVisibility() == View.GONE){
+        if (fab_top.getVisibility() == View.GONE) {
             fab_top.setVisibility(View.VISIBLE);
-            ViewCompat.animate(fab_top).scaleX(1.0f).scaleY(1.0f).alpha(1.0f)
+            ViewCompat.animate(fab_top).scaleX(1.0F).scaleY(1.0F).alpha(1.0F)
                     .setInterpolator(INTERPOLATOR).withLayer().setListener(null).start();
         }
     }

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+    <!--主要有两个用途：
+    1、作为顶层应用的装饰或者chrome布局
+    2、作为一个容器来协调一个或多个子views-->
 
 <!--CoordinatorLayout是一个“加强版”的 FrameLayout，它主要有两个用途：
 （1） 用作应用的顶层布局管理器
 （2） 通过为子View指定 behavior 实现自定义的交互行为。
 在我们做 Material Design 风格的app时通常都使用 CoordinatorLayout 作为布局的根节点，以便实现特定的UI交互行为。
 。-->
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
 <!--
     AppBarLayout必须作为CoordinatorLayout的直接子View，否则它的大部分功能将不会生效，如layout_scrollFlags等。
@@ -16,23 +15,34 @@
     TabLayout 与 Toolbar 同级，父节点为 AppBarLayout ，保证 TabLayout 能够能够显示在 Toolbar 外面而不随其一起隐藏。
 -->
 
-    <!--AppbarLayout是一种支持响应滚动手势的app bar布局, -->
+<!--AppbarLayout是一种支持响应滚动手势的app bar布局, -->
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--colorPrimary—导航栏颜色
+        colorPrimaryDark—通知栏颜色
+        colorAccent—控件选中后颜色在color.xml中设置-->
         <!--ToolBar的出现是为了替换之前的ActionBar的各种不灵活使用方式,
         相反,ToolBar的使用变得非常灵活,因为它可以让我们自由往里面添加子控件.
         低版本要使用的话,可以添加support-v7包. -->
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolBar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/ToolbarTheme"/>
-
-        <include layout="@layout/content_main"/>
+            android:background="@color/black"
+            android:theme="@style/ToolbarTheme" />
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_main" />
+
 </android.support.design.widget.CoordinatorLayout>
+
+
+

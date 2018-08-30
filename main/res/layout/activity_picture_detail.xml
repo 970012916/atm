@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,31 +7,30 @@
 
     <!--1、scaleType=“matrix”            保持原图大小、从左上角的点开始，以矩阵形式绘图。
 
-        2、scaleType=“fitXY”              将原图进行横方向（即XY方向）的拉伸后绘制的。
+    2、scaleType=“fitXY”              将原图进行横方向（即XY方向）的拉伸后绘制的。
 
-        3、scaleType=“fitStart”           将原图沿左上角的点（即matrix方式绘图开始的点），按比例缩放原图绘制而成的。
+    3、scaleType=“fitStart”           将原图沿左上角的点（即matrix方式绘图开始的点），按比例缩放原图绘制而成的。
 
-        4、scaleType=“fitCenter”        将原图沿上方居中的点（即matrix方式绘图第一行的居中的点），按比例缩放原图绘制而成的。
+    4、scaleType=“fitCenter”        将原图沿上方居中的点（即matrix方式绘图第一行的居中的点），按比例缩放原图绘制而成的。
 
-        5、scaleType=“fitEnd”            将原图沿下方居中的点（即matrix方式绘图最后一行的居中的点），按比例缩放原图绘制而成的。
+    5、scaleType=“fitEnd”            将原图沿下方居中的点（即matrix方式绘图最后一行的居中的点），按比例缩放原图绘制而成的。
 
-        6、scaleType=“Center”          保持原图大小，以原图的几何中心点和ImagView的几何中心点为基准，只绘制ImagView大小的图像。
+    6、scaleType=“Center”          保持原图大小，以原图的几何中心点和ImagView的几何中心点为基准，只绘制ImagView大小的图像。
 
-        7、scaleType=“centerCrop”   不保持原图大小，以原图的几何中心点和ImagView的几何中心点为基准，只绘制ImagView大小的图像（以填满
-        ImagView为目标，对原图进行裁剪）。
+    7、scaleType=“centerCrop”   不保持原图大小，以原图的几何中心点和ImagView的几何中心点为基准，只绘制ImagView大小的图像（以填满
+    ImagView为目标，对原图进行裁剪）。
 
-        8、scaleType=“centerInside”  不保持原图大小，以原图的几何中心点和ImagView的几何中心点为基准，只绘制ImagView大小的图像（以显示
-    -->
+    8、scaleType=“centerInside”  不保持原图大小，以原图的几何中心点和ImagView的几何中心点为基准，只绘制ImagView大小的图像（以显示
+-->
     <ImageView
+        android:id="@+id/img_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/img_picture"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -5,20 +5,25 @@ import android.widget.Toast;
 
 import com.coderpig.drysisters.DrySisterApp;
 
-public class ToastUtils {
+/**
+ * 描述：Toast 工具类
+ *
+ * @author CoderPig on 2018/02/14 11:06.
+ */
 
+public class ToastUtils {
+    /**
+     * 分别对应Toast.LENGTH_LONG（3.5秒）和Toast.LENGTH_SHORT（2秒）的值
+     */
     public static void shortToast(String msg) {
-        /**
-         * 分别对应Toast.LENGTH_LONG（3.5秒）和Toast.LENGTH_SHORT（2秒）的值
-         */
-        Toast toast = Toast.makeText(DrySisterApp.getContext(),msg,Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.BOTTOM,0,40);
+        Toast toast = Toast.makeText(DrySisterApp.getContext(),msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.BOTTOM, 0, 40);
         toast.show();
     }
 
     public static void longToast(String msg) {
-        Toast toast = Toast.makeText(DrySisterApp.getContext(),msg,Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.BOTTOM,0,40);
+        Toast toast = Toast.makeText(DrySisterApp.getContext(),msg, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.BOTTOM, 0, 40);
         toast.show();
     }
 }
